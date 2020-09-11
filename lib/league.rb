@@ -1,6 +1,9 @@
 require 'open-uri'
 require 'nokogiri'
 require 'pry'
+require_relative 'league_module.rb'
+require_relative 'team.rb'
+require_relative 'player.rb'
 
 class League
     extend BigLeagues::ClassMethods
@@ -13,8 +16,7 @@ class League
         super
         @teams = []
         self.assign_teams
-        self.assign_conferences
-        self.sort_teams
+        self.sort_teams_alphabetically_by_conference
     end
 
     def self.all
@@ -22,34 +24,40 @@ class League
     end
 
     def assign_teams
-        Nokogiri::HTML(open(@url)).css("ul.d3-o-footer__panel-links li a").each do |tag|
-            if tag.attribute('data-link_type').value == "_all-teams"
-                hash = {}
-                hash[:name] = tag.attribute('data-link_name').value
-                hash[:roster_url] = tag.attribute('href').value + "team/players-roster/"
-                initialize_team(hash)
+        Nokogiri::HTML(open(@url)).css("ul.d3-o-footer__panel-links").each do |tag|
+            tag.css('li a').each do |a|
+                if a.attribute('data-link_type').value == '_all-teams'
+                    hash = {}
+                    hash[:name] = a.attribute('data-link_name').value
+                    hash[:division] = tag.text.strip
+                    hash[:conference] = tag.text.strip.split(' ')[0]
+                    hash[:url] = a.attribute('href').value + "team/players-roster/"
+                    self.initialize_team(hash)
+                end
             end
         end
     end
     
     def initialize_team(hash)
-        arg_hash = {name: hash[:name], url: hash[:roster_url], league: self}
-        if !Team.all.detect{|t| t.name == arg_hash[:name]}
-            new_team = Team.new(arg_hash)
-            @teams << new_team
-        end
-    end    
+        hash[:league] = self
+        new_team = Team.new(hash)
+        @teams << new_team
+    end 
 
-    def assign_conferences
-        self.teams.map.with_index do |team, i|
-            i < (self.teams.length / 2) ? team.conference = @conferences[0] : team.conference = @conferences[1]
-        end
+    def sort_teams_alphabetically_by_conference
+        conf_one = @teams.select{|team| team.conference == self.conferences[0]}
+        conf_two = @teams.select{|team| team.conference == self.conferences[1]}
+        @teams = [conf_one.sort_by{|team| team.name}, conf_two.sort_by{|team| team.name}].flatten!
     end
 
-    def sort_teams
-        half = @teams.length / 2
-        conf_one = @teams[0..(half - 1)]
-        conf_two = @teams[half..]
-        @teams = [conf_one, conf_two].flatten!
+    def conferences
+        @conferences = self.teams.map{|team| team.conference} .uniq
     end
+
+    def divisions
+        @divisions = self.teams.map{|team| team.division} .uniq
+    end 
+
 end
+
+
