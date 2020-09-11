@@ -41,23 +41,27 @@ class League
     def initialize_team(hash)
         hash[:league] = self
         new_team = Team.new(hash)
-        @teams << new_team
+        self.teams << new_team
     end 
 
     def sort_teams_alphabetically_by_conference
         conf_one = @teams.select{|team| team.conference == self.conferences[0]}
         conf_two = @teams.select{|team| team.conference == self.conferences[1]}
-        @teams = [conf_one.sort_by{|team| team.name}, conf_two.sort_by{|team| team.name}].flatten!
+        self.teams = [conf_one.sort_by{|team| team.name}, conf_two.sort_by{|team| team.name}].flatten!
     end
 
     def conferences
-        @conferences = self.teams.map{|team| team.conference} .uniq
+        self.conferences = self.teams.map{|team| team.conference} .uniq
     end
 
     def divisions
-        @divisions = self.teams.map{|team| team.division} .uniq
+        self.divisions = self.teams.map{|team| team.division} .uniq
     end 
 
 end
 
 
+# def get_name
+#     title = Nokogiri::HTML(open(@url)).css('title').text
+#     self.name = title.split("Official Site of the")[1].split('|')[0].strip
+# end

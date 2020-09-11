@@ -89,7 +89,7 @@ module FlowModule
 
     def team_options
         puts "1. Display entire roster"
-        puts "2. Look roster by jersey number"
+        puts "2. Look at roster by jersey number"
         puts "3. Look at team by weight"
         line
         self.final_options

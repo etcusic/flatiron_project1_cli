@@ -1,6 +1,10 @@
-require 'bundler'
-Bundler.require
-require_all 'lib'
+# require 'bundler'
+# Bundler.require
+# require_all 'lib'
+require_relative '../lib/league_module.rb'
+require_relative '../lib/league.rb'
+require_relative '../lib/team.rb'
+require_relative '../lib/player.rb'
 require_relative 'flow_module.rb'
 
 
@@ -11,6 +15,17 @@ class Interaction
     def initialize(league)
         @league = league
         self.greeting
+    end
+  
+    def line
+        puts " "
+    end
+    
+    def greeting
+        line
+        puts "Greetings, humanoid being."
+        puts "Would you like some information about the footballs?"
+        puts "Press 'enter' for some options."
         gets.strip
         self.page_one
     end
@@ -21,13 +36,6 @@ class Interaction
         self.first_move(input)
     end
 
-    def greeting
-        self.line
-        puts "Greetings, humanoid being."
-        puts "Would you like some information about the footballs?"
-        puts "Press 'enter' for some options."
-    end
-
     def initial_options
         line
         puts "1. Inspect a team." 
@@ -36,10 +44,6 @@ class Interaction
         puts "4. Exit and leave me alone. (chef's choice)"
         line
         puts "-- type 1, 2, 3, or 4 and press enter --"
-    end
-    
-    def line
-        puts " "
     end
 
     def invalid_input
@@ -55,8 +59,7 @@ class Interaction
     end
 
     def exit
-        line
-        puts "Goodbye!"
+        line ; puts "Goodbye!" ; line
         return 
     end
 

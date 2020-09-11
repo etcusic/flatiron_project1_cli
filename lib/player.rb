@@ -1,6 +1,9 @@
 require 'open-uri'
 require 'nokogiri'
 require 'pry'
+require_relative 'league_module.rb'
+require_relative 'team.rb'
+require_relative 'league.rb'
 
 class Player
     extend BigLeagues::ClassMethods
@@ -21,5 +24,5 @@ class Player
         puts "#{@name}, ##{@number}, pos:#{@position}, #{@height}, #{@weight}lbs, age:#{@age}"
     end
 
-    
 end
+
