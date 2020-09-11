@@ -1,7 +1,3 @@
-require 'open-uri'
-require 'nokogiri'
-require 'pry'
-
 module BigLeagues
     module ClassMethods
         def reset_all

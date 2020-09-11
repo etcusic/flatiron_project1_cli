@@ -1,10 +1,3 @@
-require 'open-uri'
-require 'nokogiri'
-require 'pry'
-require_relative 'league_module.rb'
-require_relative 'league.rb'
-require_relative 'player.rb'
-
 class Team
     extend BigLeagues::ClassMethods
     include BigLeagues::InstanceMethods

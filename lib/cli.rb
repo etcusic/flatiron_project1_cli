@@ -1,13 +1,3 @@
-# require 'bundler'
-# Bundler.require
-# require_all 'lib'
-require_relative '../lib/league_module.rb'
-require_relative '../lib/league.rb'
-require_relative '../lib/team.rb'
-require_relative '../lib/player.rb'
-require_relative 'flow_module.rb'
-
-
 class Interaction
     include FlowModule
     attr_accessor :league
